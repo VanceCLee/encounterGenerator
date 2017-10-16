@@ -1,0 +1,33 @@
+  <html>
+  <head>
+    <title>Encounter Gen</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+    <script src="DnD.js"></script>
+
+  </head>
+  <body ng-app="DnD" ng-controller="MainCtrl">
+  <div class="row">
+  <div class="col-md-6 col-md-offset-3">
+  <div class="page-header"> 
+    <h1>Encounter Gen</h1>
+  </div>
+
+    <form ng-submit="addPost()" style = "margin-top30px;">
+      <select ng-model="formDifficulty" ng-options="item for item in difficulties" ng-init="formDifficulty = difficulties[1]">        
+      </select>
+      <input type="text" ng-model="formPlayers"></input>
+      <input type="text" ng-model="formAvgLvl"></input>
+      <button type="submit">Post</button>
+    </form>
+    <div>
+      {{test}}
+    </div>
+    <div ng-repeat="post in posts | orderBy: '-upvotes'">
+      <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
+      {{post.title}} - upvotes: {{post.upvotes}}
+    </div>
+  </div>
+  </div>
+  </body>
+  </html>
