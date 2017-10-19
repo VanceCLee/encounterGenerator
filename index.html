@@ -1,3 +1,4 @@
+<!DOCTYPE html>
   <html>
   <head>
     <title>Encounter Gen</title>
@@ -14,7 +15,7 @@
   </div>
 
     <form ng-submit="addPost()" style = "margin-top30px;">
-      <select ng-model="formDifficulty" ng-options="item for item in difficulties" ng-init="formDifficulty = difficulties[1]">        
+      <select ng-model="formDifficulty" ng-options="item for item in difficulties" ng-init="formDifficulty = difficulties[0]">        
       </select>
       <input type="text" ng-model="formPlayers"></input>
       <input type="text" ng-model="formAvgLvl"></input>
