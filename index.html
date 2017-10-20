@@ -21,8 +21,8 @@
     <form ng-submit="generateEncounter()">
       <select ng-model="formDifficulty" ng-options="item for item in difficulties" ng-init="formDifficulty = difficulties[0]">        
       </select>
-      <input type="number" ng-model="formPlayers" min="1" step=any value=1></input>
-      <input type="number" ng-model="formAvgLvl" min="1" step=any value=1></input>
+      <input type="number" ng-model="formPlayers" min="1" step=any value=1 placeholder="Number of players"></input>
+      <input type="number" ng-model="formAvgLvl" min="1" step=any value=1 placeholder="Average level"></input>
       <button type="submit">Generate</button>
     </form>
     <div ng-repeat="monster in monsters | orderBy: '-quantity'">
