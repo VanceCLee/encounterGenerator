@@ -30,6 +30,7 @@ angular.module('News', ['ui.router'])
     $scope.monsters = monsterFactory.monsters;
     
     $scope.generateEncounter = function() {
+      $scope.monsters.length = 0;
       var encounterLvl = $scope.formPlayers * $scope.formAvgLvl;
       if($scope.formDifficulty == 'Easy') {
           encounterLvl *= 2;
@@ -38,8 +39,13 @@ angular.module('News', ['ui.router'])
       }else {
           encounterLvl *= 8;
       }
-      var hardnessIntervalBot = encounterLvl*.75;
-      var hardnessIntervalTop = encounterLvl*1.25;
+      $scope.hardnessIntervalBot = encounterLvl*.75;
+      $scope.hardnessIntervalTop = encounterLvl*1.25;
+      $scope.currentHardness = 0;
+      getMonsters();
+    };
+
+    function getMonsters() {
       var randomMonster = Math.floor(Math.random() * 325);
       var myurl= "http://www.dnd5eapi.co/api/monsters/" + randomMonster ;
       $http({
@@ -49,50 +55,59 @@ angular.module('News', ['ui.router'])
           var stringResponce=JSON.stringify(response);
           var responceObject = JSON.parse(stringResponce);
           console.log(responceObject.data);
-          $scope.thing = responceObject.data;
+          var givenMonster = responceObject.data;
           $scope.randomMonster = responceObject.data.name;
-          $scope.addMonster();
+          $scope.pushMonster(givenMonster);
       }, function errorCallback(response) {
           var errorResponce = "The servers are currently down. =(";
           $scope.randomMonster = errorResponce.name;
       });
-    };
+    }
     
     $scope.difficulties = ["Easy", "Medium", "Hard"];
 
-    $scope.addMonster = function(){
-      $scope.monsters.push({
-        name: $scope.thing.name,
-        quantity: 1,
-        strength: $scope.thing.strength,
-        dexterity: $scope.thing.dexterity,
-        constitution: $scope.thing.constitution,
-        intelligence: $scope.thing.intelligence,
-        wisdom: $scope.thing.wisdom,
-        charisma: $scope.thing.charisma,
+    $scope.pushMonster = function (givenMonster) {
+      console.log("sanity");
+      console.log(givenMonster);
+      if ((givenMonster.challenge_rating + $scope.currentHardness) < $scope.hardnessIntervalTop) {
+        $scope.currentHardness += givenMonster.challenge_rating;
+        console.log(givenMonster.challenge_rating);
+        console.log($scope.currentHardness);
+        $scope.monsters.push({
+          name: givenMonster.name,
+          quantity: 1,
+          strength: givenMonster.strength,
+          dexterity: givenMonster.dexterity,
+          constitution: givenMonster.constitution,
+          intelligence: givenMonster.intelligence,
+          wisdom: givenMonster.wisdom,
+          charisma: givenMonster.charisma,
 
-        constitutionSave: $scope.thing.constitution_save,
-        intelligenceSave: $scope.thing.intelligence_save,
-        wisdomSave: $scope.thing.wisdom_save,
+          constitutionSave: givenMonster.constitution_save,
+          intelligenceSave: givenMonster.intelligence_save,
+          wisdomSave: givenMonster.wisdom_save,
 
-        size: $scope.thing.size,
-        type: $scope.thing.type,
-        subtype: $scope.thing.subtype,
-        alignment: $scope.thing.alignment,
+          size: givenMonster.size,
+          type: givenMonster.type,
+          subtype: givenMonster.subtype,
+          alignment: givenMonster.alignment,
 
-        armor: $scope.thing.armor,
-        hitPoints: $scope.thing.hit_points,
+          armor: givenMonster.armor,
+          hitPoints: givenMonster.hit_points,
 
-        senses: $scope.thing.senses,
-        languages: $scope.thing.languages,
+          senses: givenMonster.senses,
+          languages: givenMonster.languages,
 
-        specialAbilities: $scope.thing.special_abilities,
-        actions: $scope.thing.actions,
-        legendaryActions: $scope.thing.legendary_actions
-      });
+          specialAbilities: givenMonster.special_abilities,
+          actions: givenMonster.actions,
+          legendaryActions: givenMonster.legendary_actions
+        });
+      }
+      if ($scope.currentHardness < $scope.hardnessIntervalBot) {
+        getMonsters();
+      }
     };
-
-  }])
+}])
   .controller('MonsterCtrl', [
     '$scope',
     '$stateParams',
