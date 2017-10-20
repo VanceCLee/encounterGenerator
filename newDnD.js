@@ -5,6 +5,12 @@ angular.module('News', ['ui.router'])
   };
   return o;
 }])
+.factory('monsterFactory',[function(){
+  var o = {
+    monsters: []
+  };
+  return o;
+}])
 .config([
   '$stateProvider',
   '$urlRouterProvider',
@@ -26,10 +32,10 @@ angular.module('News', ['ui.router'])
   '$scope',
   '$http',
   'postFactory',
-  function($scope, $http, postFactory){
+  'monsterFactory',
+  function($scope, $http, postFactory, monsterFactory){
     $scope.posts = postFactory.posts;
-
-    $scope.monsters = [];
+    $scope.monsters = monsterFactory.monsters;
     
     $scope.generateEncounter = function() {
          var encounterLvl = $scope.formPlayers * $scope.formAvgLvl;
@@ -44,7 +50,9 @@ angular.module('News', ['ui.router'])
             var stringResponce=JSON.stringify(response);
             var responceObject = JSON.parse(stringResponce);
             console.log(responceObject.data);
+            $scope.thing = responceObject.data;
             $scope.randomMonster = responceObject.data.name;
+            $scope.addMonster();
           }, function errorCallback(response) {
             var errorResponce = "The servers are currently down. =(";
             $scope.randomMonster = errorResponce.name;
@@ -62,6 +70,17 @@ angular.module('News', ['ui.router'])
       });
       $scope.title = '';
     };
+
+    $scope.addMonster = function(){
+      console.log("win?");
+      $scope.monsters.push({
+        name: $scope.thing.name,
+        quantity: 1,
+        comments: []
+      });
+      $scope.title = '';
+    };
+
     $scope.incrementUpvotes = function(post) {
       post.upvotes += 1;
     };

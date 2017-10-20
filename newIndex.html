@@ -32,6 +32,9 @@
         {{post.title}} - upvotes: {{post.upvotes}}
         <a href="#/posts/{{posts.indexOf(post)}}">Comments</a>
     </div>
+    <div ng-repeat="monster in monsters | orderBy: '-quantity'">
+        {{monster.quantity}} {{monster.name}}
+    </div>
   </script>
   <script type="text/ng-template" id="/posts.html">
     <div class="page-header">
