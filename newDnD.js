@@ -24,22 +24,31 @@ angular.module('News', ['ui.router'])
 }])
   .controller('MainCtrl', [
   '$scope',
+  '$http',
   'postFactory',
-  function($scope, postFactory){
+  function($scope, $http, postFactory){
     $scope.posts = postFactory.posts;
 
     $scope.monsters = [];
     
     $scope.generateEncounter = function() {
-     if($scope.formContent === '') {return;}
-     var difficultySelected = $scope.formDifficulty;
-      var encounterLvl = $scope.formPlayers * $scope.formAvgLvl; 
-        var hardnessIntervalBot = 0;
-        var hardnessIntervalTop = 0;
-        var randomMonster = Math.floor(Math.random() * 300);
-        if (true){};
-
-        console.log($scope.formDifficulty);
+         var encounterLvl = $scope.formPlayers * $scope.formAvgLvl;
+              var hardnessIntervalBot = 0;
+              var hardnessIntervalTop = 0;
+              var randomMonster = Math.floor(Math.random() * 325);
+              var myurl= "http://www.dnd5eapi.co/api/monsters/" + randomMonster ;
+              $http({
+            method: 'GET',
+            url: myurl
+          }).then(function successCallBack(response) {
+            var stringResponce=JSON.stringify(response);
+            var responceObject = JSON.parse(stringResponce);
+            console.log(responceObject.data);
+            $scope.randomMonster = responceObject.data.name;
+          }, function errorCallback(response) {
+            var errorResponce = "The servers are currently down. =(";
+            $scope.randomMonster = errorResponce.name;
+          });
         };
     
     $scope.difficulties = ["Easy", "Medium", "Hard"];
