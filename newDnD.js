@@ -30,26 +30,33 @@ angular.module('News', ['ui.router'])
     $scope.monsters = monsterFactory.monsters;
     
     $scope.generateEncounter = function() {
-         var encounterLvl = $scope.formPlayers * $scope.formAvgLvl;
-              var hardnessIntervalBot = 0;
-              var hardnessIntervalTop = 0;
-              var randomMonster = Math.floor(Math.random() * 325);
-              var myurl= "http://www.dnd5eapi.co/api/monsters/" + randomMonster ;
-              $http({
-            method: 'GET',
-            url: myurl
-          }).then(function successCallBack(response) {
-            var stringResponce=JSON.stringify(response);
-            var responceObject = JSON.parse(stringResponce);
-            console.log(responceObject.data);
-            $scope.thing = responceObject.data;
-            $scope.randomMonster = responceObject.data.name;
-            $scope.addMonster();
-          }, function errorCallback(response) {
-            var errorResponce = "The servers are currently down. =(";
-            $scope.randomMonster = errorResponce.name;
-          });
-        };
+      var encounterLvl = $scope.formPlayers * $scope.formAvgLvl;
+      if($scope.formDifficulty == 'Easy') {
+          encounterLvl *= 2;
+      } else if($scope.formDifficulty == 'Medium') {
+          encounterLvl *= 4;
+      }else {
+          encounterLvl *= 8;
+      }
+      var hardnessIntervalBot = encounterLvl*.75;
+      var hardnessIntervalTop = encounterLvl*1.25;
+      var randomMonster = Math.floor(Math.random() * 325);
+      var myurl= "http://www.dnd5eapi.co/api/monsters/" + randomMonster ;
+      $http({
+          method: 'GET',
+          url: myurl
+      }).then(function successCallBack(response) {
+          var stringResponce=JSON.stringify(response);
+          var responceObject = JSON.parse(stringResponce);
+          console.log(responceObject.data);
+          $scope.thing = responceObject.data;
+          $scope.randomMonster = responceObject.data.name;
+          $scope.addMonster();
+      }, function errorCallback(response) {
+          var errorResponce = "The servers are currently down. =(";
+          $scope.randomMonster = errorResponce.name;
+      });
+    };
     
     $scope.difficulties = ["Easy", "Medium", "Hard"];
 
@@ -67,6 +74,21 @@ angular.module('News', ['ui.router'])
         constitutionSave: $scope.thing.constitution_save,
         intelligenceSave: $scope.thing.intelligence_save,
         wisdomSave: $scope.thing.wisdom_save,
+
+        size: $scope.thing.size,
+        type: $scope.thing.type,
+        subtype: $scope.thing.subtype,
+        alignment: $scope.thing.alignment,
+
+        armor: $scope.thing.armor,
+        hitPoints: $scope.thing.hit_points,
+
+        senses: $scope.thing.senses,
+        languages: $scope.thing.languages,
+
+        specialAbilities: $scope.thing.special_abilities,
+        actions: $scope.thing.actions,
+        legendaryActions: $scope.thing.legendary_actions
       });
     };
 
