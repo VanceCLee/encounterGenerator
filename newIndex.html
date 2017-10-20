@@ -7,13 +7,13 @@
     <script src="newDnD.js"></script>
   </head>
   <body ng-app="News" ng-controller="MainCtrl">
-    <div ng-model="row">
-        <div ng-model="col-md-6 col-md-offset-3">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
             <ui-view></ui-view>
       </div>
     </div>
         <script type="text/ng-template" id="/home.html">
-        <div ng-model="page-header"> 
+        <div class="page-header"> 
          <h1>News</h1>
     </div>
 
@@ -22,76 +22,57 @@
       </select>
       <input type="text" ng-model="formPlayers"></input>
       <input type="text" ng-model="formAvgLvl"></input>
-      <button type="submit">Post</button>
+      <button type="submit">Generate</button>
     </form>
     <div>
         {{randomMonster}}
     </div>
-    <div ng-repeat="post in posts | orderBy: '-upvotes'">
-            <span ng-model="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(post)"></span>
-        {{post.title}} - upvotes: {{post.upvotes}}
-        <a href="#/posts/{{posts.indexOf(post)}}">Comments</a>
-    </div>
     <div ng-repeat="monster in monsters | orderBy: '-quantity'">
-        <a href="#/posts/{{posts.indexOf(monster)}}">{{monster.quantity}} {{monster.name}}</a>
+        <a href="#/monster/{{monsters.indexOf(monster)}}">{{monster.quantity}} {{monster.name}}</a>
     </div>
   </script>
-  <script type="text/ng-template" id="/posts.html">
-    <div ng-model="page-header">
+  <script type="text/ng-template" id="/monster.html">
+    <div class="page-header">
       <h3>
-          {{post.title}}
+          {{monster.name}}
       </h3>
     </div>
 
-    <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
-      <span ng-model="glyphicon glyphicon-thumbs-up"
-        ng-click="incrementUpvotes(comment)"></span>
-      {{comment.upvotes}}
-      <span style="font-size:20px; margin-left:10px;">
-        {{comment.body}}
-      </span>
-    </div>
-    <form ng-submit="addComment()"
-      style="margin-top:30px;">
-      <h3>Add a new comment</h3>
-
     <div id="monsterData">
-        <h2 id="monsterName"></h2>
-        <div ng-model="inlineItem stats">
+        <h2>{{monster.name}}</h2>
+        <div id="stats">
             <div id="characteristics">
-                <p ng-model="pageStrength"></p>
-                <p ng-model="pageDexterity"></p>
-                <p ng-model="pageConstitution"></p>
-                <p ng-model="pageIntelligence"></p>
-                <p ng-model="pagewisdom"></p>
-                <p ng-model="pagecharisma"></p>
+                <p>{{monster.strength}}</p>
+                <p>{{monster.dexterity}}</p>
+                <p>{{monster.constitution}}</p>
+                <p>{{monster.intelligence}}</p>
+                <p>{{monster.wisdom}}</p>
+                <p>{{monster.charisma}}</p>
             </div>
             <div id="saves">
-                <p ng-model="pageConstitutionSave"></p>
-                <p ng-model="pageIntelligenceSave"></p>
-                <p ng-model="pageWisdomSave"></p>
+                <p>{{monster.constitutionSave}}</p>
+                <p>{{monster.intelligenceSave}}</p>
+                <p>{{monster.wisdomSave}}</p>
             </div>
         </div>
-        <div ng-model="inlineItem info">
+        <div id="stats">
             <div>
-                <p ng-model="pageSize"></p>
-                <p ng-model="pageType"></p>
-                <p ng-model="pageSubType"></p>
-                <p ng-model="pageAlignment"></p>
+                <p>{{monster.size}}</p>
+                <p>{{monster.type}}</p>
+                <p>{{monster.subType}}</p>
+                <p>{{monster.alignment}}</p>
             </div>
             <div>
-                <p ng-model="pageArmorng-model"></p>
-                <p ng-model="pageHitPoints"></p>
+                <p>{{monster.armor}}</p>
+                <p>{{monster.hitPoints}}</p>
             </div>
-            <p ng-model="pageSenses"></p>
-            <p ng-model="pageLanguages"></p>
+            <p>{{monster.senses}}</p>
+            <p>{{monster.languages}}</p>
         </div>
         <div id="specialAbilities"></div>
         <div id="actions"></div>
         <div id="legendaryActions"></div>
     </div>
-      <button type="submit" ng-model="btn btn-primary">Post</button>
-    </form>
   </script>
 
   </body>

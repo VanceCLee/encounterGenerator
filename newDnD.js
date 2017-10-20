@@ -1,10 +1,4 @@
 angular.module('News', ['ui.router'])
-.factory('postFactory', [function(){
-  var o = {
-    posts: []
-  };
-  return o;
-}])
 .factory('monsterFactory',[function(){
   var o = {
     monsters: []
@@ -21,20 +15,18 @@ angular.module('News', ['ui.router'])
         templateUrl: '/home.html',
         controller: 'MainCtrl'
       })
-      .state('posts', {
-        url: '/posts/{id}',
-        templateUrl: '/posts.html',
-        controller: 'PostCtrl'
+      .state('monster', {
+        url: '/monster/{id}',
+        templateUrl: '/monster.html',
+        controller: 'MonsterCtrl'
       });
     $urlRouterProvider.otherwise('home');
 }])
   .controller('MainCtrl', [
   '$scope',
   '$http',
-  'postFactory',
   'monsterFactory',
-  function($scope, $http, postFactory, monsterFactory){
-    $scope.posts = postFactory.posts;
+  function($scope, $http, monsterFactory){
     $scope.monsters = monsterFactory.monsters;
     
     $scope.generateEncounter = function() {
@@ -61,46 +53,28 @@ angular.module('News', ['ui.router'])
     
     $scope.difficulties = ["Easy", "Medium", "Hard"];
 
-    $scope.addPost = function(){
-      if($scope.formContent === '') { return; }
-      $scope.posts.push({
-        title: $scope.formContent,
-        upvotes: 0,
-        comments: []
-      });
-      $scope.title = '';
-    };
-
     $scope.addMonster = function(){
-      console.log("win?");
       $scope.monsters.push({
         name: $scope.thing.name,
         quantity: 1,
-        comments: []
+        strength: $scope.thing.strength,
+        dexterity: $scope.thing.dexterity,
+        constitution: $scope.thing.constitution,
+        intelligence: $scope.thing.intelligence,
+        wisdom: $scope.thing.wisdom,
+        charisma: $scope.thing.charisma,
+
+        constitutionSave: $scope.thing.constitution_save,
+        intelligenceSave: $scope.thing.intelligence_save,
+        wisdomSave: $scope.thing.wisdom_save,
       });
-      $scope.title = '';
     };
 
-    $scope.incrementUpvotes = function(post) {
-      post.upvotes += 1;
-    };
-  }
-  ])
-  .controller('PostCtrl', [
+  }])
+  .controller('MonsterCtrl', [
     '$scope',
     '$stateParams',
-    'postFactory', 
-    function($scope, $stateParams, postFactory){
-      $scope.post = postFactory.posts[$stateParams.id];
-      $scope.addComment = function(){
-        if($scope.body === '') { return; }
-        $scope.post.comments.push({
-          body: $scope.body,
-          upvotes: 0
-        });
-        $scope.body = '';
-      };
-    $scope.incrementUpvotes = function(comment){
-      comment.upvotes += 1; 
-    };
+    'monsterFactory',
+    function($scope, $stateParams, monsterFactory){
+      $scope.monster = monsterFactory.monsters[$stateParams.id];
   }]);
